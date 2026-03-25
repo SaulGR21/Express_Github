@@ -10,8 +10,8 @@ app.get('/', (req, res) => {  // Ruta principal
 app.get('/usuario', (req, res) => {  // Endpoint GET /usuario
   const usuario = {
     id: 1,
-    nombre: 'Saul',
-    rol: 'Estudiante'
+    nombre: 'Juan',
+    rol: 'Administrador'
   };
 
   res.json(usuario); // Aqui es para que envía el objeto como respuesta en formato JSON
