@@ -14,7 +14,7 @@ app.get('/usuario', (req, res) => {  // Endpoint GET /usuario
     rol: 'Estudiante'
   };
 
-  res.json(usuario);
+  res.json(usuario); // Aqui es para que envía el objeto como respuesta en formato JSON
 });
 
 // Servidor
