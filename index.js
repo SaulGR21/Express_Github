@@ -1,4 +1,5 @@
 const express = require('express');
+const pool = require('./db')
 const app = express();
 
 
@@ -16,6 +17,16 @@ app.get('/usuario', (req, res) => {  // Endpoint GET /usuario
 
   res.json(usuario); // Aqui es para que envía el objeto como respuesta en formato JSON
 });
+
+pool.connect()
+  .then(() => {
+    console.log('Conexión exitosa a PostgreSQL');
+  })
+  .catch((err) => {
+    console.error('Error de conexión', err);
+  });
+
+
 
 // Servidor
 app.listen(3000, () => {
