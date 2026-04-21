@@ -9,37 +9,37 @@ app.get('/', (req, res) => {
 });
 
 //Ruta con SELECT para la tabla alumno
-app.get('/alumnos', async (req, res) => {
+app.get('/materias', async (req, res) => {
   try {
-    const resultado = await pool.query('SELECT * FROM alumno'); // Consultamos a la base de datos react_express_db
+    const resultado = await pool.query('SELECT * FROM materia'); // Consultamos a la base de datos react_express_db
     res.json(resultado.rows); // Enviamos los datos al cliente (navegador o Postman)git
   } catch (error) {
-    console.error('Error al consultar alumnos:', error);
-    res.status(500).json({ error: 'Error al obtener los alumnos' });
+    console.error('Error al consultar materias:', error);
+    res.status(500).json({ error: 'Error al obtener las materias' });
   }
 });
 
-// Definimos una ruta POST en el endpoint '/alumnos' para recibir datos
-app.post('/alumnos', async (req, res) => {
+// Definimos una ruta POST en el endpoint '/alumnos'(En esta actividad sera '/materias') para recibir datos
+app.post('/materias', async (req, res) => {
   try {
-    const { nombre, apellido, edad, correo } = req.body;
+    const { nombre, semestre, creditos } = req.body;
 
-    if (!nombre || !apellido || !edad || !correo) { // Validación: Verificamos que todos los campos requeridos existan
+    if (!nombre || !semestre || !creditos) { // Validación: Verificamos que todos los campos requeridos existan
       return res.status(400).json({ error: 'Todos los campos son obligatorios' });  // Si falta algún campo, detenemos la ejecución y respondemos con un error 400
     }
 
     const resultado = await pool.query(
-      'INSERT INTO alumno (nombre, apellido, edad, correo) VALUES ($1, $2, $3, $4) RETURNING *',
-      [nombre, apellido, edad, correo]
+      'INSERT INTO materia (nombre, semestre, creditos) VALUES ($1, $2, $3 ) RETURNING *',
+      [nombre, semestre, creditos]
     );
 
     res.status(201).json({
-      mensaje: 'Alumno insertado correctamente',
-      alumno: resultado.rows[0]  // Enviamos el registro que se guardó en la base de datos
+      mensaje: 'Materia insertado correctamente',
+      materia: resultado.rows[0]  // Enviamos el registro que se guardó en la base de datos
     }); 
   } catch (error) {
-    console.error('Error al insertar alumno:', error);
-    res.status(500).json({ error: 'Error al insertar el alumno' }); //Respondemos al cliente con un error 500
+    console.error('Error al insertar materia:', error);
+    res.status(500).json({ error: 'Error al insertar el materia' }); //Respondemos al cliente con un error 500
   }
 });
  
