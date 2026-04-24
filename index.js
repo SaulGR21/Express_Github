@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
   res.send('API funcionando');
 });
 
-//Ruta con SELECT para la tabla alumno
+//Ruta con SELECT para la tabla materias
 app.get('/materias', async (req, res) => {
   try {
     const resultado = await pool.query('SELECT * FROM materia'); // Consultamos a la base de datos react_express_db
@@ -16,6 +16,32 @@ app.get('/materias', async (req, res) => {
   } catch (error) {
     console.error('Error al consultar materias:', error);
     res.status(500).json({ error: 'Error al obtener las materias' });
+  }
+});
+
+// Ruta con el SELECT para el id de materias
+app.get('/materias/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Aqui estara la validacion se que le hara
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'El id debe ser numérico' });
+    }
+
+    const resultado = await pool.query(
+      'SELECT * FROM materia WHERE id = $1',
+      [id]
+    );
+
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({ error: 'Materia no encontrada' });
+    }
+
+    res.json(resultado.rows[0]);
+  } catch (error) {
+    console.error('Error al consultar materia:', error);
+    res.status(500).json({ error: 'Error al obtener la materia' });
   }
 });
 
@@ -43,16 +69,46 @@ app.post('/materias', async (req, res) => {
   }
 });
  
- //Ruta con SELECT pero para la tabla usuario
-app.get('/usuario', (req, res) => {
-  const usuario = {
-    id: 1,
-    nombre: 'Juan',
-    rol: 'Administrador'
-  };
 
-  res.json(usuario);
+//Ruta con SELECT pero para la tabla usuario
+app.get('/usuarios', async (req, res) => {
+  try {
+    const resultado = await pool.query('SELECT * FROM usuario');
+    res.json(resultado.rows);
+  } catch (error) {
+    console.error('Error al consultar usuarios:', error);
+    res.status(500).json({ error: 'Error al obtener los usuarios' });
+  }
 });
+
+
+// Ruta con el SELECT para el id de usuarios
+app.get('/usuarios/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Aqui esta la validacion que se Hara
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'El id debe ser numérico' });
+    }
+
+    const resultado = await pool.query(
+      'SELECT * FROM usuario WHERE id = $1',
+      [id]
+    );
+
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json(resultado.rows[0]);
+  } catch (error) {
+    console.error('Error al consultar usuario:', error);
+    res.status(500).json({ error: 'Error al obtener el usuario' });
+  }
+});
+
+
 
 
 app.listen(3000, () => {
